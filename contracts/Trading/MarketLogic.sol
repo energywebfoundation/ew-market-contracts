@@ -24,7 +24,6 @@ contract MarketLogic is AgreementLogic {
 
     event createdNewDemand(address _sender, uint indexed _demandId);
     event createdNewSupply(address _sender, uint indexed _supplyId);
-    AssetContractLookupInterface public assetContractLookup;
     
     /// @notice constructor
     constructor(
@@ -34,7 +33,6 @@ contract MarketLogic is AgreementLogic {
         AgreementLogic(_assetContractLookup,_marketContractLookup) 
         public 
     {
-  
     }
 
     /// @notice Function to create a demand

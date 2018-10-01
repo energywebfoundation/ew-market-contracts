@@ -45,7 +45,7 @@ contract AgreementLogic is RoleManagement, Updatable {
         AssetContractLookupInterface _assetContractLookup,
         MarketContractLookupInterface _marketContractLookup
     ) 
-        RoleManagement(UserContractLookupInterface(_assetContractLookup.userRegistry()) ,_marketContractLookup) 
+        RoleManagement(UserContractLookupInterface(_assetContractLookup.userRegistry()), _marketContractLookup) 
         public 
     {
         assetContractLookup = _assetContractLookup;
@@ -144,8 +144,9 @@ contract AgreementLogic is RoleManagement, Updatable {
         isInitialized
     {
         MarketDB.Agreement memory agreement = db.getAgreementDB(_agreementId);
+        MarketDB.Supply memory supply = db.getSupply(agreement.supplyId);
         
-        require(AssetProducingInterface(assetContractLookup.assetProducingRegistry()).getFullAsset(agreement.supplyId).owner == msg.sender, "approveAgreementSupply: wrong msg.sender");
+        require(AssetProducingInterface(assetContractLookup.assetProducingRegistry()).getFullAsset(supply.assetId).owner == msg.sender, "approveAgreementSupply: wrong msg.sender");
         
         // we approve a supply. If it's returning true it means that both supply and demand are approved thus making the agreement complete
         if(db.approveAgreementSupplyDB(_agreementId)){

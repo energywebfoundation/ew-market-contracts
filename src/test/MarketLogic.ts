@@ -644,20 +644,21 @@ describe('MarketLogic', () => {
             { privateKey: assetOwnerPK },
         );
 
-        const allEvents = await marketLogic.getAllLogAgreementCreatedEvents({ fromBlock: tx.blockNumber, toBlock: tx.blockNumber });
+        if (isGanache) {
+            const allEvents = await marketLogic.getAllLogAgreementCreatedEvents({ fromBlock: tx.blockNumber, toBlock: tx.blockNumber });
 
-        assert.equal(allEvents.length, 1);
-        const agreementEvent = allEvents[0];
-        assert.equal(agreementEvent.event, 'LogAgreementCreated');
-        assert.deepEqual(agreementEvent.returnValues, {
-            0: '0',
-            1: '0',
-            2: '0',
-            _agreementId: '0',
-            _demandId: '0',
-            _supplyId: '0',
-        });
-
+            assert.equal(allEvents.length, 1);
+            const agreementEvent = allEvents[0];
+            assert.equal(agreementEvent.event, 'LogAgreementCreated');
+            assert.deepEqual(agreementEvent.returnValues, {
+                0: '0',
+                1: '0',
+                2: '0',
+                _agreementId: '0',
+                _demandId: '0',
+                _supplyId: '0',
+            });
+        }
     });
 
     it('should be able to approve aggreement again as supplyOwner', async () => {
@@ -731,19 +732,21 @@ describe('MarketLogic', () => {
 
         const tx = await marketLogic.approveAgreementDemand(0, { privateKey: traderPK });
 
-        const allEvents = await marketLogic.getAllLogAgreementFullySignedEvents({ fromBlock: tx.blockNumber, toBlock: tx.blockNumber });
-        assert.equal(allEvents.length, 1);
-        const signedEvent = allEvents[0];
+        if (isGanache) {
+            const allEvents = await marketLogic.getAllLogAgreementFullySignedEvents({ fromBlock: tx.blockNumber, toBlock: tx.blockNumber });
+            assert.equal(allEvents.length, 1);
+            const signedEvent = allEvents[0];
 
-        assert.equal(signedEvent.event, 'LogAgreementFullySigned');
-        assert.deepEqual(signedEvent.returnValues, {
-            0: '0',
-            1: '0',
-            2: '0',
-            _agreementId: '0',
-            _demandId: '0',
-            _supplyId: '0',
-        });
+            assert.equal(signedEvent.event, 'LogAgreementFullySigned');
+            assert.deepEqual(signedEvent.returnValues, {
+                0: '0',
+                1: '0',
+                2: '0',
+                _agreementId: '0',
+                _demandId: '0',
+                _supplyId: '0',
+            });
+        }
     });
 
     it('should return the full agreement', async () => {
@@ -799,20 +802,22 @@ describe('MarketLogic', () => {
             { privateKey: traderPK },
         );
 
-        const allEvents = await marketLogic.getAllcreatedNewDemandEvents(
-            { fromBlock: tx.blockNumber, toBlock: tx.blockNumber },
-        );
+        if (isGanache) {
+            const allEvents = await marketLogic.getAllcreatedNewDemandEvents(
+                { fromBlock: tx.blockNumber, toBlock: tx.blockNumber },
+            );
 
-        assert.equal(allEvents.length, 1);
+            assert.equal(allEvents.length, 1);
 
-        const createDemandEvent = allEvents[0];
-        assert.equal(createDemandEvent.event, 'createdNewDemand');
-        assert.deepEqual(createDemandEvent.returnValues, {
-            0: accountTrader,
-            1: '1',
-            _sender: accountTrader,
-            _demandId: '1',
-        });
+            const createDemandEvent = allEvents[0];
+            assert.equal(createDemandEvent.event, 'createdNewDemand');
+            assert.deepEqual(createDemandEvent.returnValues, {
+                0: accountTrader,
+                1: '1',
+                _sender: accountTrader,
+                _demandId: '1',
+            });
+        }
     });
 
     it('should create an aggreement as trader', async () => {
@@ -825,20 +830,21 @@ describe('MarketLogic', () => {
             { privateKey: traderPK },
         );
 
-        const allEvents = await marketLogic.getAllLogAgreementCreatedEvents({ fromBlock: tx.blockNumber, toBlock: tx.blockNumber });
+        if (isGanache) {
+            const allEvents = await marketLogic.getAllLogAgreementCreatedEvents({ fromBlock: tx.blockNumber, toBlock: tx.blockNumber });
 
-        assert.equal(allEvents.length, 1);
-        const agreementEvent = allEvents[0];
-        assert.equal(agreementEvent.event, 'LogAgreementCreated');
-        assert.deepEqual(agreementEvent.returnValues, {
-            0: '1',
-            1: '1',
-            2: '1',
-            _agreementId: '1',
-            _demandId: '1',
-            _supplyId: '1',
-        });
-
+            assert.equal(allEvents.length, 1);
+            const agreementEvent = allEvents[0];
+            assert.equal(agreementEvent.event, 'LogAgreementCreated');
+            assert.deepEqual(agreementEvent.returnValues, {
+                0: '1',
+                1: '1',
+                2: '1',
+                _agreementId: '1',
+                _demandId: '1',
+                _supplyId: '1',
+            });
+        }
     });
 
     it('should return the (not yet full) 2nd agreement', async () => {
@@ -902,22 +908,25 @@ describe('MarketLogic', () => {
         assert.isTrue(failed);
     });
 
-    it('shouldbe able to call approveAgreementSupply as assetOwner', async () => {
+    it('should be able to call approveAgreementSupply as assetOwner', async () => {
 
         const tx = await marketLogic.approveAgreementSupply(1, { privateKey: assetOwnerPK });
-        const allEvents = await marketLogic.getAllLogAgreementFullySignedEvents({ fromBlock: tx.blockNumber, toBlock: tx.blockNumber });
-        assert.equal(allEvents.length, 1);
-        const signedEvent = allEvents[0];
 
-        assert.equal(signedEvent.event, 'LogAgreementFullySigned');
-        assert.deepEqual(signedEvent.returnValues, {
-            0: '1',
-            1: '1',
-            2: '1',
-            _agreementId: '1',
-            _demandId: '1',
-            _supplyId: '1',
-        });
+        if (isGanache) {
+            const allEvents = await marketLogic.getAllLogAgreementFullySignedEvents({ fromBlock: tx.blockNumber, toBlock: tx.blockNumber });
+            assert.equal(allEvents.length, 1);
+            const signedEvent = allEvents[0];
+
+            assert.equal(signedEvent.event, 'LogAgreementFullySigned');
+            assert.deepEqual(signedEvent.returnValues, {
+                0: '1',
+                1: '1',
+                2: '1',
+                _agreementId: '1',
+                _demandId: '1',
+                _supplyId: '1',
+            });
+        }
     });
 
     it('should return the (not yet full) 2nd agreement', async () => {

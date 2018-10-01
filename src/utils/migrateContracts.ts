@@ -5,7 +5,10 @@ import { MarketContractLookup } from '../wrappedContracts/MarketContractLookup';
 import { Web3Type } from '../types/web3';
 import { migrateUserRegistryContracts } from 'ew-user-registry-contracts';
 
-export async function migrateMarketRegistryContracts(web3: Web3Type, assetContractLookupAddress: string): Promise<JSON> {
+export async function migrateMarketRegistryContracts(
+    web3: Web3Type,
+    assetContractLookupAddress: string,
+): Promise<JSON> {
     return new Promise<any>(async (resolve, reject) => {
 
         const configFile = JSON.parse(fs.readFileSync(process.cwd() + '/connection-config.json', 'utf8'));

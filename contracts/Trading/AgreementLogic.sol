@@ -20,6 +20,7 @@ pragma experimental ABIEncoderV2;
 import "../../contracts/Trading/MarketDB.sol";
 import "ew-user-registry-contracts/Users/RoleManagement.sol";
 import "ew-utils-general-contracts/Interfaces/Updatable.sol";
+import "ew-asset-registry-contracts/Interfaces/AssetGeneralInterface.sol";
 import "ew-asset-registry-contracts/Interfaces/AssetProducingInterface.sol";
 import "ew-asset-registry-contracts/Interfaces/AssetConsumingInterface.sol";
 import "ew-asset-registry-contracts/Interfaces/AssetContractLookupInterface.sol";
@@ -67,7 +68,7 @@ contract AgreementLogic is RoleManagement, Updatable {
         MarketDB.Demand memory demand = db.getDemand(_demandId);
         MarketDB.Supply memory supply = db.getSupply(_supplyId);
 
-        address supplyOwner = AssetProducingInterface(assetContractLookup.assetProducingRegistry()).getFullAsset(supply.assetId).owner;
+        address supplyOwner = AssetGeneralInterface(assetContractLookup.assetProducingRegistry()).getAssetOwner(supply.assetId);
 
         require(msg.sender == demand.demandOwner || msg.sender == supplyOwner, "createDemand: wrong owner when creating");
         uint agreementId = db.createAgreementDB(_propertiesDocumentHash, _documentDBURL, _demandId, _supplyId);
@@ -146,7 +147,7 @@ contract AgreementLogic is RoleManagement, Updatable {
         MarketDB.Agreement memory agreement = db.getAgreementDB(_agreementId);
         MarketDB.Supply memory supply = db.getSupply(agreement.supplyId);
         
-        require(AssetProducingInterface(assetContractLookup.assetProducingRegistry()).getFullAsset(supply.assetId).owner == msg.sender, "approveAgreementSupply: wrong msg.sender");
+        require(AssetGeneralInterface(assetContractLookup.assetProducingRegistry()).getAssetOwner(supply.assetId) == msg.sender, "approveAgreementSupply: wrong msg.sender");
         
         // we approve a supply. If it's returning true it means that both supply and demand are approved thus making the agreement complete
         if(db.approveAgreementSupplyDB(_agreementId)){

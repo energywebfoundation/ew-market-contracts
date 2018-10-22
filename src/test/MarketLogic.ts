@@ -335,14 +335,18 @@ describe('MarketLogic', () => {
 
     it('should onboard an asset', async () => {
 
-        await assetRegistry.createAsset('0x1000000000000000000000000000000000000005',
-                                        accountAssetOwner,
-                                        10,
-                                        '0x1000000000000000000000000000000000000005',
-                                        true,
-                                        'propertiesDocuementHash',
-                                        'url',
-                                        { privateKey: privateKeyDeployment });
+        await assetRegistry.createAsset(
+            '0x1000000000000000000000000000000000000005',
+            accountAssetOwner,
+            true,
+            (['0x1000000000000000000000000000000000000006'] as any),
+            'propertiesDocumentHash',
+            'url',
+            10,
+            {
+                privateKey: privateKeyDeployment,
+            },
+        );
     });
 
     it('should fail when trying to create a supply with an non-existing asset as trader', async () => {

@@ -18,6 +18,7 @@ pragma experimental ABIEncoderV2;
 
 import "../../contracts/Trading/MarketDB.sol";
 import "../../contracts/Trading/AgreementLogic.sol";
+import "ew-asset-registry-contracts/Interfaces/AssetGeneralInterface.sol";
 
 /// @title The logic contract for the AgreementDB of Origin list
 contract MarketLogic is AgreementLogic {
@@ -63,7 +64,7 @@ contract MarketLogic is AgreementLogic {
         external
         isInitialized
      {  
-        require(AssetProducingInterface(assetContractLookup.assetProducingRegistry()).getFullAsset(_assetId).owner == msg.sender, "approveAgreementSupply: wrong msg.sender");
+        require(AssetGeneralInterface(assetContractLookup.assetProducingRegistry()).getAssetOwner(_assetId) == msg.sender, "approveAgreementSupply: wrong msg.sender");
         uint supplyID = db.createSupply(_propertiesDocumentHash, _documentDBURL, _assetId);
         emit createdNewSupply(msg.sender, supplyID);
     }

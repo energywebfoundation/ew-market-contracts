@@ -18,12 +18,12 @@ pragma solidity ^0.4.24;
 pragma experimental ABIEncoderV2;
 
 import "../../contracts/Trading/MarketDB.sol";
-import "ew-user-registry-contracts/Users/RoleManagement.sol";
-import "ew-utils-general-contracts/Interfaces/Updatable.sol";
-import "ew-asset-registry-contracts/Interfaces/AssetGeneralInterface.sol";
-import "ew-asset-registry-contracts/Interfaces/AssetProducingInterface.sol";
-import "ew-asset-registry-contracts/Interfaces/AssetConsumingInterface.sol";
-import "ew-asset-registry-contracts/Interfaces/AssetContractLookupInterface.sol";
+import "ew-user-registry-contracts/contracts/Users/RoleManagement.sol";
+import "ew-utils-general-contracts/contracts/Interfaces/Updatable.sol";
+import "ew-asset-registry-contracts/contracts/Interfaces/AssetGeneralInterface.sol";
+import "ew-asset-registry-contracts/contracts/Interfaces/AssetProducingInterface.sol";
+import "ew-asset-registry-contracts/contracts/Interfaces/AssetConsumingInterface.sol";
+import "ew-asset-registry-contracts/contracts/Interfaces/AssetContractLookupInterface.sol";
 import "../../contracts/Interfaces/MarketContractLookupInterface.sol";
 
 contract AgreementLogic is RoleManagement, Updatable {
@@ -35,11 +35,6 @@ contract AgreementLogic is RoleManagement, Updatable {
     MarketDB public db;
     
     AssetContractLookupInterface public assetContractLookup;
-
-    modifier isInitialized {
-        require((db) != address(0x0));
-        _;
-    }
 
     /// @notice constructor
     constructor(
@@ -63,7 +58,6 @@ contract AgreementLogic is RoleManagement, Updatable {
         uint _supplyId
     )
         external
-        isInitialized
     {
         MarketDB.Demand memory demand = db.getDemand(_demandId);
         MarketDB.Supply memory supply = db.getSupply(_supplyId);
@@ -87,7 +81,7 @@ contract AgreementLogic is RoleManagement, Updatable {
         public
         onlyOwner
     {
-        require(address(db) == 0x0);
+        require(address(db) == 0x0,"init: already initialize");
         db = MarketDB(_database);
     }
 
@@ -101,13 +95,12 @@ contract AgreementLogic is RoleManagement, Updatable {
     }  
 
     /// @return length of the allAgreements-array
-    function getAllAgreementListLength() external isInitialized view returns (uint) {
+    function getAllAgreementListLength() external view returns (uint) {
         return db.getAllAgreementListLengthDB();
     }
 
     function getAgreement(uint _agreementId)
         external 
-        isInitialized
         view 
         returns (
             string _propertiesDocumentHash,
@@ -129,7 +122,6 @@ contract AgreementLogic is RoleManagement, Updatable {
 
     function approveAgreementDemand(uint _agreementId) 
         public
-        isInitialized
     {
         MarketDB.Agreement memory agreement = db.getAgreementDB(_agreementId);
         require(db.getDemand(agreement.demandId).demandOwner == msg.sender, "approveAgreementDemand: wrong msg.sender");
@@ -142,7 +134,6 @@ contract AgreementLogic is RoleManagement, Updatable {
 
     function approveAgreementSupply(uint _agreementId) 
         public
-        isInitialized
     {
         MarketDB.Agreement memory agreement = db.getAgreementDB(_agreementId);
         MarketDB.Supply memory supply = db.getSupply(agreement.supplyId);

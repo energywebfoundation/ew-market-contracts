@@ -16,11 +16,11 @@
 
 pragma solidity ^0.4.24;
 
-import "ew-utils-general-contracts/Msc/Owned.sol";
-import "ew-utils-general-contracts/Interfaces/Updatable.sol";
-import "ew-user-registry-contracts/Interfaces/UserContractLookupInterface.sol";
+import "ew-utils-general-contracts/contracts/Msc/Owned.sol";
+import "ew-utils-general-contracts/contracts/Interfaces/Updatable.sol";
+import "ew-user-registry-contracts/contracts/Interfaces/UserContractLookupInterface.sol";
 import "../contracts/Interfaces/MarketContractLookupInterface.sol";
-import "ew-asset-registry-contracts/Interfaces/AssetContractLookupInterface.sol";
+import "ew-asset-registry-contracts/contracts/Interfaces/AssetContractLookupInterface.sol";
 
 /// @title Contract for storing the current logic-contracts-addresses for the certificate of origin
 contract MarketContractLookup is Owned, MarketContractLookupInterface {

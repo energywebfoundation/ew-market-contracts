@@ -18,7 +18,7 @@ pragma experimental ABIEncoderV2;
 
 import "../../contracts/Trading/MarketDB.sol";
 import "../../contracts/Trading/AgreementLogic.sol";
-import "ew-asset-registry-contracts/Interfaces/AssetGeneralInterface.sol";
+import "ew-asset-registry-contracts/contracts/Interfaces/AssetGeneralInterface.sol";
 
 /// @title The logic contract for the AgreementDB of Origin list
 contract MarketLogic is AgreementLogic {
@@ -45,7 +45,6 @@ contract MarketLogic is AgreementLogic {
         string _documentDBURL
     )
         external
-        isInitialized
         onlyRole(RoleManagement.Role.Trader)
      {
         uint demandID = db.createDemand(_propertiesDocumentHash, _documentDBURL, msg.sender);
@@ -62,22 +61,21 @@ contract MarketLogic is AgreementLogic {
         uint _assetId
     )
         external
-        isInitialized
      {  
-        require(AssetGeneralInterface(assetContractLookup.assetProducingRegistry()).getAssetOwner(_assetId) == msg.sender, "approveAgreementSupply: wrong msg.sender");
+        require(AssetGeneralInterface(assetContractLookup.assetProducingRegistry()).getAssetOwner(_assetId) == msg.sender, "wrong msg.sender");
         uint supplyID = db.createSupply(_propertiesDocumentHash, _documentDBURL, _assetId);
         emit createdNewSupply(msg.sender, supplyID);
     }
 
     /// @notice function to return the length of the allDemands-array in the database
     /// @return length of the allDemansa-array
-    function getAllDemandListLength() external isInitialized view returns (uint) {
+    function getAllDemandListLength() external view returns (uint) {
         return db.getAllDemandListLength();
     }
 
-        /// @notice function to return the length of the allSupply-array in the database
+    /// @notice function to return the length of the allSupply-array in the database
     /// @return length of the allDemansa-array
-    function getAllSupplyListLength() external isInitialized view returns (uint) {
+    function getAllSupplyListLength() external view returns (uint) {
         return db.getAllSupplyListLength();
     }
 
@@ -86,7 +84,6 @@ contract MarketLogic is AgreementLogic {
     /// @return propertiesDocumentHash, documentDBURL and owner 
     function getDemand(uint _demandId) 
         external 
-        isInitialized 
         view 
         returns (
             string _propertiesDocumentHash,
@@ -102,7 +99,6 @@ contract MarketLogic is AgreementLogic {
 
     function getSupply(uint _supplyId)
         external 
-        isInitialized 
         view 
         returns (
             string _propertiesDocumentHash,

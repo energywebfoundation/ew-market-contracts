@@ -125,9 +125,8 @@ describe('MarketLogic', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert msg.sender is not owner');
-            }
+            assert.include(ex.message, 'msg.sender is not owner');
+
         }
         assert.isTrue(failed);
     });
@@ -143,9 +142,8 @@ describe('MarketLogic', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert msg.sender is not owner');
-            }
+            assert.include(ex.message, 'msg.sender is not owner');
+
         }
         assert.isTrue(failed);
     });
@@ -199,9 +197,8 @@ describe('MarketLogic', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert user does not have the required role');
-            }
+            assert.include(ex.message, 'user does not have the required role');
+
         }
 
         assert.isTrue(failed);
@@ -227,9 +224,8 @@ describe('MarketLogic', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert user does not have the required role');
-            }
+            assert.include(ex.message, 'user does not have the required role');
+
         }
 
         assert.isTrue(failed);
@@ -362,10 +358,6 @@ describe('MarketLogic', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert approveAgreementSupply: wrong msg.sender');
-                //    assert.include(ex.message, 'revert user does not have the required role');
-            }
         }
 
         assert.isTrue(failed);
@@ -384,10 +376,7 @@ describe('MarketLogic', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert approveAgreementSupply: wrong msg.sender');
-                //    assert.include(ex.message, 'revert user does not have the required role');
-            }
+
         }
 
         assert.isTrue(failed);
@@ -612,9 +601,8 @@ describe('MarketLogic', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert createDemand: wrong owner when creating');
-            }
+            assert.include(ex.message, 'createDemand: wrong owner when creating');
+
         }
 
         assert.isTrue(failed);
@@ -686,9 +674,8 @@ describe('MarketLogic', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert approveAgreementDemand: wrong msg.sender');
-            }
+            assert.include(ex.message, 'approveAgreementDemand: wrong msg.sender');
+
         }
 
         assert.isTrue(failed);
@@ -703,9 +690,8 @@ describe('MarketLogic', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert approveAgreementDemand: wrong msg.sender');
-            }
+            assert.include(ex.message, 'approveAgreementDemand: wrong msg.sender');
+
         }
 
         assert.isTrue(failed);
@@ -887,9 +873,8 @@ describe('MarketLogic', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert approveAgreementSupply: wrong msg.sender');
-            }
+            assert.include(ex.message, 'approveAgreementSupply: wrong msg.sender');
+
         }
 
         assert.isTrue(failed);
@@ -904,9 +889,8 @@ describe('MarketLogic', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert approveAgreementSupply: wrong msg.sender');
-            }
+            assert.include(ex.message, 'approveAgreementSupply: wrong msg.sender');
+
         }
 
         assert.isTrue(failed);

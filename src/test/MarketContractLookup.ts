@@ -107,9 +107,8 @@ describe('MarketContractLookup', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert already initialized');
-            }
+            assert.include(ex.message, 'already initialized');
+
         }
         assert.isTrue(failed);
     });
@@ -123,9 +122,8 @@ describe('MarketContractLookup', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert msg.sender is not owner');
-            }
+            assert.include(ex.message, 'msg.sender is not owner');
+
         }
         assert.isTrue(failed);
     });
@@ -150,9 +148,8 @@ describe('MarketContractLookup', () => {
         }
         catch (ex) {
             failed = true;
-            if (isGanache) {
-                assert.include(ex.message, 'revert msg.sender is not owner');
-            }
+            assert.include(ex.message, 'msg.sender is not owner');
+
         }
 
         assert.isTrue(failed);

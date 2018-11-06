@@ -34,6 +34,9 @@ contract AgreementDB is Owned {
     Agreement[] private allAgreements;
 
     
+	/// @notice approves an demand for an agreement
+	/// @param _agreementId the agreement Id 
+	/// @return true when both supply and demand agreed
     function approveAgreementDemandDB(uint _agreementId) 
         onlyOwner
         external
@@ -44,6 +47,9 @@ contract AgreementDB is Owned {
         return (a.approvedByDemandOwner && a.approvedBySupplyOwner);
     }
 
+	/// @notice approves an supply for an agreement
+	/// @param _agreementId the agreement Id
+	/// @return true when both supply and demand agreed
     function approveAgreementSupplyDB(uint _agreementId) 
         onlyOwner
         external
@@ -54,10 +60,12 @@ contract AgreementDB is Owned {
         return (a.approvedByDemandOwner && a.approvedBySupplyOwner);
     }
 
-    /// @notice function to create a agreement
-    /// @param _propertiesDocumentHash document-hash with all the properties of the agreement
-    /// @param _documentDBURL url-address of the agreement    
-    /// @return the index and thus the identifier of a agreement
+	/// @notice function to create a agreement
+	/// @param _propertiesDocumentHash document-hash with all the properties of the agreement
+	/// @param _documentDBURL url-address of the agreement
+	/// @param _demandId the demand Id
+	/// @param _supplyId the supply Id
+	/// @return the index and thus the identifier of a agreement
     function createAgreementDB
     (  
         string _propertiesDocumentHash,
@@ -82,9 +90,9 @@ contract AgreementDB is Owned {
       
     }
 
-    /// @notice Returns a agreement-struct
-    /// @param _agreementId id of a agreement
-    /// @return returns a agreement-struct
+	/// @notice Returns a agreement-struct
+	/// @param _agreementId id of a agreement
+	/// @return returns a agreement-struct
     function getAgreementDB(uint _agreementId)
         external
         view 
@@ -94,8 +102,8 @@ contract AgreementDB is Owned {
         return allAgreements[_agreementId];        
     }
 
-    /// @notice funtion to retrieve the length of the allagreements-array
-    /// @return the length of the allagreements-array
+	/// @notice funtion to retrieve the length of the allagreements-array
+	/// @return the length of the allagreements-array
     function getAllAgreementListLengthDB() 
         external
         view

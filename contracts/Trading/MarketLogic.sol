@@ -36,10 +36,10 @@ contract MarketLogic is AgreementLogic {
     {
     }
 
-    /// @notice Function to create a demand
-    /// @param _propertiesDocumentHash document-hash with all the properties of the demand
-    /// @param _documentDBURL url-address of the demand     
-     /// @dev will return an event with the event-Id
+	/// @notice Function to create a demand
+	/// @dev will return an event with the event-Id
+	/// @param _propertiesDocumentHash document-hash with all the properties of the demand
+	/// @param _documentDBURL url-address of the demand
     function createDemand( 
         string _propertiesDocumentHash,
         string _documentDBURL
@@ -51,10 +51,11 @@ contract MarketLogic is AgreementLogic {
         emit createdNewDemand(msg.sender, demandID);
     }
 
-     /// @notice Function to create a demand
-    /// @param _propertiesDocumentHash document-hash with all the properties of the demand
-    /// @param _documentDBURL url-address of the demand     
-     /// @dev will return an event with the event-Id
+	/// @notice Function to create a demand
+	/// @dev will return an event with the event-Id
+	/// @param _propertiesDocumentHash document-hash with all the properties of the demand
+	/// @param _documentDBURL url-address of the demand
+	/// @param _assetId the asset Id
     function createSupply( 
         string _propertiesDocumentHash,
         string _documentDBURL,
@@ -67,21 +68,21 @@ contract MarketLogic is AgreementLogic {
         emit createdNewSupply(msg.sender, supplyID);
     }
 
-    /// @notice function to return the length of the allDemands-array in the database
-    /// @return length of the allDemansa-array
+	/// @notice function to return the length of the allDemands-array in the database
+	/// @return length of the allDemansa-array
     function getAllDemandListLength() external view returns (uint) {
         return db.getAllDemandListLength();
     }
 
-    /// @notice function to return the length of the allSupply-array in the database
-    /// @return length of the allDemansa-array
+	/// @notice function to return the length of the allSupply-array in the database
+	/// @return length of the allDemansa-array
     function getAllSupplyListLength() external view returns (uint) {
         return db.getAllSupplyListLength();
     }
 
-    /// @notice Returns the information of a demand
-    /// @param _demandId index of the demand in the allDemands-array
-    /// @return propertiesDocumentHash, documentDBURL and owner 
+	/// @notice Returns the information of a demand
+	/// @param _demandId index of the demand in the allDemands-array
+	/// @return propertiesDocumentHash, documentDBURL and owner
     function getDemand(uint _demandId) 
         external 
         view 
@@ -97,6 +98,9 @@ contract MarketLogic is AgreementLogic {
         _owner = demand.demandOwner;
     }
 
+	/// @notice gets a supply
+	/// @param _supplyId the supply Id
+	/// @return the supply
     function getSupply(uint _supplyId)
         external 
         view 

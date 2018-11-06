@@ -47,10 +47,12 @@ contract AgreementLogic is RoleManagement, Updatable {
         assetContractLookup = _assetContractLookup;
     }
 
-    /// @notice Function to create a demand
-    /// @param _propertiesDocumentHash document-hash with all the properties of the demand
-    /// @param _documentDBURL url-address of the demand     
-     /// @dev will return an event with the event-Id
+	/// @notice Function to create a demand
+	/// @dev will return an event with the event-Id
+	/// @param _propertiesDocumentHash document-hash with all the properties of the demand
+	/// @param _documentDBURL url-address of the demand
+	/// @param _demandId the demand Id
+	/// @param _supplyId the supply Id
     function createAgreement( 
         string _propertiesDocumentHash,
         string _documentDBURL,
@@ -76,7 +78,9 @@ contract AgreementLogic is RoleManagement, Updatable {
         emit LogAgreementCreated(agreementId, _demandId, _supplyId);
     }
 
-    /// @notice fuction to set the database contract, can only be called once
+	/// @notice fuction to set the database contract, can only be called once
+	/// @param _database the database contract
+	/// @param _admin the admin
     function init(address _database, address _admin) 
         public
         onlyOwner
@@ -85,8 +89,8 @@ contract AgreementLogic is RoleManagement, Updatable {
         db = MarketDB(_database);
     }
 
-    /// @notice Updates the logic contract
-    /// @param _newLogic Address of the new logic contract
+	/// @notice Updates the logic contract
+	/// @param _newLogic Address of the new logic contract
     function update(address _newLogic) 
         external
         onlyOwner    
@@ -94,11 +98,15 @@ contract AgreementLogic is RoleManagement, Updatable {
         db.changeOwner(_newLogic);
     }  
 
-    /// @return length of the allAgreements-array
+	/// @notice get all agreement list length
+	/// @return length of the allAgreements-array
     function getAllAgreementListLength() external view returns (uint) {
         return db.getAllAgreementListLengthDB();
     }
 
+	/// @notice gets agreement
+	/// @param _agreementId the agreement Id
+	/// @return the agreement
     function getAgreement(uint _agreementId)
         external 
         view 
@@ -120,6 +128,8 @@ contract AgreementLogic is RoleManagement, Updatable {
         _approvedByDemandOwner = agreement.approvedByDemandOwner;
     }
 
+	/// @notice approves a demand for an agreement
+	/// @param _agreementId the agreement Id
     function approveAgreementDemand(uint _agreementId) 
         public
     {
@@ -132,6 +142,8 @@ contract AgreementLogic is RoleManagement, Updatable {
         }    
     }
 
+	/// @notice approves a supply for an agreement
+	/// @param _agreementId the agreement Id
     function approveAgreementSupply(uint _agreementId) 
         public
     {

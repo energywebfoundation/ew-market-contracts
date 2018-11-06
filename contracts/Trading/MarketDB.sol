@@ -45,6 +45,11 @@ contract MarketDB is AgreementDB {
     /// @param _owner The owner of the contract
     constructor(address _owner) public Owned(_owner) {} 
 
+	/// @notice creates a demand
+	/// @param _propertiesDocumentHash the properties document hash
+	/// @param _documentDBURL the url of the document in a database
+	/// @param _demandOwner the demand Owner
+	/// @return the demand-id
     function createDemand
     (
         string _propertiesDocumentHash,
@@ -63,6 +68,11 @@ contract MarketDB is AgreementDB {
         _demandId = allDemands.length>0?allDemands.length-1:0;
     }
 
+	/// @notice creates a supply
+	/// @param _propertiesDocumentHash the properties document hash
+	/// @param _documentDBURL the url of the document in a database
+	/// @param _assetId the asset Id
+	/// @return the supply-id
     function createSupply
     (
         string _propertiesDocumentHash,
@@ -81,8 +91,8 @@ contract MarketDB is AgreementDB {
         _supplyId = allSupply.length>0?allSupply.length-1:0;
     }
 
-    /// @notice funtion to retrieve the length of the allagreements-array
-    /// @return the length of the allagreements-array
+	/// @notice funtion to retrieve the length of the allagreements-array
+	/// @return the length of the allagreements-array
     function getAllDemandListLength() 
         external
         view
@@ -92,8 +102,8 @@ contract MarketDB is AgreementDB {
         return allDemands.length;
     }
 
-       /// @notice funtion to retrieve the length of the allagreements-array
-    /// @return the length of the allagreements-array
+	/// @notice funtion to retrieve the length of the allagreements-array
+	/// @return the length of the allagreements-array
     function getAllSupplyListLength() 
         external
         view
@@ -105,9 +115,9 @@ contract MarketDB is AgreementDB {
 
  
 
-    /// @notice Returns a agreement-struct
-    /// @param _demandId id of a agreement
-    /// @return returns a agreement-struct
+	/// @notice Returns a agreement-struct
+	/// @param _demandId id of a agreement
+	/// @return returns a agreement-struct
     function getDemand(uint _demandId)
         external
         view 
@@ -117,9 +127,9 @@ contract MarketDB is AgreementDB {
         return allDemands[_demandId];        
     }
 
-    /// @notice Returns a agreement-struct
-    /// @param _supplyId id of a agreement
-    /// @return returns a agreement-struct
+	/// @notice Returns a agreement-struct
+	/// @param _supplyId id of a agreement
+	/// @return returns a agreement-struct
     function getSupply(uint _supplyId)
         external
         view 

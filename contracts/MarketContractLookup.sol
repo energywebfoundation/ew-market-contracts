@@ -31,7 +31,10 @@ contract MarketContractLookup is Owned, MarketContractLookupInterface {
     /// @notice The constructor 
     constructor() Owned(msg.sender) public{ } 
 
-    /// @notice function to initialize the contracts, setting the needed contract-addresses
+	/// @notice function to initialize the contracts, setting the needed contract-addresses
+	/// @param _assetRegistry the asset Registry
+	/// @param _marketLogicRegistry the market Logic Registry
+	/// @param _marketDB the market D B
     function init(
         AssetContractLookupInterface _assetRegistry, 
         Updatable _marketLogicRegistry, 
@@ -54,8 +57,8 @@ contract MarketContractLookup is Owned, MarketContractLookupInterface {
     }
 
    
-    /// @notice function to update one or more logic-contracts
-    /// @param _marketRegistry address of the new user-registry-logic-contract
+	/// @notice function to update one or more logic-contracts
+	/// @param _marketRegistry address of the new user-registry-logic-contract
     function update(
         Updatable _marketRegistry
     )
@@ -67,10 +70,14 @@ contract MarketContractLookup is Owned, MarketContractLookupInterface {
         marketLogicRegistry = _marketRegistry;
     }
 
+	/// @notice marketlogic registry
+	/// @return the marketlogic-registry
     function marketLogicRegistry() external view returns (address){
         return marketLogicRegistry;
     }
 
+	/// @notice asset contract lookup
+	/// @return the assetregistry
     function assetContractLookup() external view returns (address){
         return assetContractLookup;
     }

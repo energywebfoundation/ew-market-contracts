@@ -19,6 +19,12 @@ pragma experimental ABIEncoderV2;
 
 /// @title this interface defines the functions of the AssetContractLookup-Contract 
 interface MarketContractLookupInterface {
+	
+	/// @notice gets the market logic registry
+	/// @return the marketlogic registry
     function marketLogicRegistry() external view returns (address);
+
+	/// @notice gets the asset contract lookup
+	/// @return the assetlogic registry
     function assetContractLookup() external view returns (address);
 }

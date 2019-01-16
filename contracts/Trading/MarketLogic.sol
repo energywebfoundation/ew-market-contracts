@@ -13,7 +13,7 @@
 // GNU General Public License for more details, at <http://www.gnu.org/licenses/>.
 //
 // @authors: slock.it GmbH, Martin Kuechler, martin.kuechler@slock.it
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
 import "../../contracts/Trading/MarketDB.sol";
@@ -41,8 +41,8 @@ contract MarketLogic is AgreementLogic {
 	/// @param _propertiesDocumentHash document-hash with all the properties of the demand
 	/// @param _documentDBURL url-address of the demand
     function createDemand( 
-        string _propertiesDocumentHash,
-        string _documentDBURL
+        string calldata _propertiesDocumentHash,
+        string calldata _documentDBURL
     )
         external
         onlyRole(RoleManagement.Role.Trader)
@@ -57,8 +57,8 @@ contract MarketLogic is AgreementLogic {
 	/// @param _documentDBURL url-address of the demand
 	/// @param _assetId the asset Id
     function createSupply( 
-        string _propertiesDocumentHash,
-        string _documentDBURL,
+        string calldata _propertiesDocumentHash,
+        string calldata _documentDBURL,
         uint _assetId
     )
         external
@@ -87,8 +87,8 @@ contract MarketLogic is AgreementLogic {
         external 
         view 
         returns (
-            string _propertiesDocumentHash,
-            string _documentDBURL,
+            string memory _propertiesDocumentHash,
+            string memory _documentDBURL,
             address _owner
         )
     {
@@ -105,8 +105,8 @@ contract MarketLogic is AgreementLogic {
         external 
         view 
         returns (
-            string _propertiesDocumentHash,
-            string _documentDBURL,
+            string memory _propertiesDocumentHash,
+            string memory _documentDBURL,
             uint _assetId
         )
     {

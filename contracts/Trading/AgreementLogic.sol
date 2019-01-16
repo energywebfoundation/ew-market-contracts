@@ -14,7 +14,7 @@
 //
 // @authors: Martin Kuechler, martin.kuechler@slock.it
 
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
 import "../../contracts/Trading/MarketDB.sol";
@@ -41,7 +41,7 @@ contract AgreementLogic is RoleManagement, Updatable {
         AssetContractLookupInterface _assetContractLookup,
         MarketContractLookupInterface _marketContractLookup
     ) 
-        RoleManagement(UserContractLookupInterface(_assetContractLookup.userRegistry()), _marketContractLookup) 
+        RoleManagement(UserContractLookupInterface(_assetContractLookup.userRegistry()), address(_marketContractLookup)) 
         public 
     {
         assetContractLookup = _assetContractLookup;
@@ -54,8 +54,8 @@ contract AgreementLogic is RoleManagement, Updatable {
 	/// @param _demandId the demand Id
 	/// @param _supplyId the supply Id
     function createAgreement( 
-        string _propertiesDocumentHash,
-        string _documentDBURL,
+        string calldata _propertiesDocumentHash,
+        string calldata _documentDBURL,
         uint _demandId,
         uint _supplyId
     )
@@ -85,7 +85,7 @@ contract AgreementLogic is RoleManagement, Updatable {
         public
         onlyOwner
     {
-        require(address(db) == 0x0,"init: already initialize");
+        require(address(db) == address(0x0),"init: already initialize");
         db = MarketDB(_database);
     }
 
@@ -111,8 +111,8 @@ contract AgreementLogic is RoleManagement, Updatable {
         external 
         view 
         returns (
-            string _propertiesDocumentHash,
-            string _documentDBURL,
+            string memory _propertiesDocumentHash,
+            string memory _documentDBURL,
             uint _demandId,
             uint _supplyId,
             bool _approvedBySupplyOwner,

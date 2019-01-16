@@ -17,20 +17,19 @@
 import { assert } from 'chai';
 import * as fs from 'fs';
 import 'mocha';
-import { Web3Type } from '../types/web3';
+import Web3 = require('web3');
 import { migrateUserRegistryContracts, UserLogic } from 'ew-user-registry-contracts';
 import { migrateAssetRegistryContracts, AssetContractLookup } from 'ew-asset-registry-contracts';
 import { migrateMarketRegistryContracts } from '../utils/migrateContracts';
 import { MarketContractLookup } from '../wrappedContracts/MarketContractLookup';
 import { MarketDB } from '../wrappedContracts/MarketDB';
 import { MarketLogic } from '../wrappedContracts/MarketLogic';
-import { getClientVersion } from 'sloffle';
+import { MarketContractLookupJSON, MarketLogicJSON, MarketDBJSON } from '..';
 describe('MarketContractLookup', () => {
 
     const configFile = JSON.parse(fs.readFileSync(process.cwd() + '/connection-config.json', 'utf8'));
 
-    const Web3 = require('web3');
-    const web3: Web3Type = new Web3(configFile.develop.web3);
+    const web3 = new Web3(configFile.develop.web3);
 
     const privateKeyDeployment = configFile.develop.deployKey.startsWith('0x') ?
         configFile.develop.deployKey : '0x' + configFile.develop.deployKey;
@@ -45,38 +44,46 @@ describe('MarketContractLookup', () => {
 
     it('should deploy the contracts', async () => {
 
-        isGanache = (await getClientVersion(web3)).includes('EthereumJS');
+        isGanache = true;
+        const userContracts = await migrateUserRegistryContracts(web3, privateKeyDeployment);
 
-        const userContracts = await migrateUserRegistryContracts(web3);
-
-        const userLogic = new UserLogic((web3 as any),
-                                        userContracts[process.cwd() + '/node_modules/ew-user-registry-contracts/dist/contracts/UserLogic.json']);
+        const userLogic = new UserLogic((web3 as any), (userContracts as any).UserLogic);
 
         await userLogic.setUser(accountDeployment, 'admin', { privateKey: privateKeyDeployment });
 
         await userLogic.setRoles(accountDeployment, 3, { privateKey: privateKeyDeployment });
 
-        const userContractLookupAddr = userContracts[process.cwd() + '/node_modules/ew-user-registry-contracts/dist/contracts/UserContractLookup.json'];
+        const userContractLookupAddr = (userContracts as any).UserContractLookup;
 
-        const assetContracts = await migrateAssetRegistryContracts(web3, userContractLookupAddr);
+        const assetContracts = await migrateAssetRegistryContracts(web3, userContractLookupAddr, privateKeyDeployment);
 
-        const assetRegistryLookupAddr = assetContracts[process.cwd() + '/node_modules/ew-asset-registry-contracts/dist/contracts/AssetContractLookup.json'];
+        const assetRegistryLookupAddr = (assetContracts as any).AssetContractLookup;
 
-        const marketContracts = await migrateMarketRegistryContracts(web3, assetRegistryLookupAddr);
+        const marketContracts = await migrateMarketRegistryContracts(web3, assetRegistryLookupAddr, privateKeyDeployment);
 
         assetRegistryContract = new AssetContractLookup((web3 as any), assetRegistryLookupAddr);
-        marketRegistryContract = new MarketContractLookup((web3 as any));
-        marketLogic = new MarketLogic((web3 as any));
-        marketDB = new MarketDB((web3 as any));
 
         Object.keys(marketContracts).forEach(async (key) => {
 
+            let tempBytecode;
+            if (key.includes('MarketContractLookup')) {
+                marketRegistryContract = new MarketContractLookup(web3, marketContracts[key]);
+                tempBytecode = '0x' + MarketContractLookupJSON.deployedBytecode;
+            }
+
+            if (key.includes('MarketLogic')) {
+                marketLogic = new MarketLogic(web3, marketContracts[key]);
+                tempBytecode = '0x' + MarketLogicJSON.deployedBytecode;
+            }
+
+            if (key.includes('MarketDB')) {
+                marketDB = new MarketDB(web3, marketContracts[key]);
+                tempBytecode = '0x' + MarketDBJSON.deployedBytecode;
+            }
             const deployedBytecode = await web3.eth.getCode(marketContracts[key]);
             assert.isTrue(deployedBytecode.length > 0);
 
-            const contractInfo = JSON.parse(fs.readFileSync(key, 'utf8'));
-
-            const tempBytecode = '0x' + contractInfo.deployedBytecode;
+            // const tempBytecode = '0x' + contractInfo.deployedBytecode;
             assert.equal(deployedBytecode, tempBytecode);
 
         });

@@ -179,7 +179,7 @@ describe('MarketLogic', () => {
         catch (ex) {
             failed = true;
             if (isGanache) {
-                assert.include(ex.message, 'revert user does not have the required role');
+                assert.include(ex.message, 'user does not have the required role');
             }
         }
 

@@ -128,7 +128,8 @@ contract AgreementLogic is RoleManagement, Updatable {
             uint _demandId,
             uint _supplyId,
             bool _approvedBySupplyOwner,
-            bool _approvedByDemandOwner
+            bool _approvedByDemandOwner,
+            address[] memory _allowedMatcher
         )
     {
         MarketDB.Agreement memory agreement = db.getAgreementDB(_agreementId);
@@ -140,6 +141,7 @@ contract AgreementLogic is RoleManagement, Updatable {
         _supplyId = agreement.supplyId;
         _approvedBySupplyOwner = agreement.approvedBySupplyOwner;
         _approvedByDemandOwner = agreement.approvedByDemandOwner;
+        _allowedMatcher = agreement.allowedMatcher;
     }
 
     function getAgreementStruct(uint _agreementId)
@@ -210,11 +212,13 @@ contract AgreementLogic is RoleManagement, Updatable {
     {
         MarketDB.Agreement memory agreement = db.getAgreementDB(_agreementId);
 
+        require(agreement.approvedBySupplyOwner, "supply owner has not agreed yet");
+        require(agreement.approvedByDemandOwner, "demand owner has not agreed yet");
         address[] memory agreementMatcher = agreement.allowedMatcher;
         
         bool foundMatcher = false;
 
-        // we have to check all the mathcers
+        // we have to check all the matchers
         for(uint i=0; i < agreementMatcher.length; i++){
 
             if ( agreementMatcher[i] == msg.sender) {

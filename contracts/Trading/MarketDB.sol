@@ -13,7 +13,7 @@
 // GNU General Public License for more details, at <http://www.gnu.org/licenses/>.
 //
 // @authors: slock.it GmbH, Martin Kuechler, martin.kuchler@slock.it
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
 import "../../contracts/Trading/AgreementDB.sol";
@@ -52,8 +52,8 @@ contract MarketDB is AgreementDB {
 	/// @return the demand-id
     function createDemand
     (
-        string _propertiesDocumentHash,
-        string _documentDBURL,
+        string calldata _propertiesDocumentHash,
+        string calldata _documentDBURL,
         address _demandOwner
     )
         external
@@ -75,8 +75,8 @@ contract MarketDB is AgreementDB {
 	/// @return the supply-id
     function createSupply
     (
-        string _propertiesDocumentHash,
-        string _documentDBURL,
+        string calldata _propertiesDocumentHash,
+        string calldata _documentDBURL,
         uint _assetId
     )
         external
@@ -122,7 +122,7 @@ contract MarketDB is AgreementDB {
         external
         view 
         onlyOwner
-        returns (Demand)
+        returns (Demand memory)
     {
         return allDemands[_demandId];        
     }
@@ -134,7 +134,7 @@ contract MarketDB is AgreementDB {
         external
         view 
         onlyOwner
-        returns (Supply)
+        returns (Supply memory)
     {
         return allSupply[_supplyId];        
     }

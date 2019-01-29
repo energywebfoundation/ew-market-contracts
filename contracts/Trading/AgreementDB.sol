@@ -14,7 +14,7 @@
 //
 // @authors: Martin Kuechler, martin.kuechler@slock.it
 
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
 import "ew-utils-general-contracts/contracts/Msc/Owned.sol";
@@ -68,8 +68,8 @@ contract AgreementDB is Owned {
 	/// @return the index and thus the identifier of a agreement
     function createAgreementDB
     (  
-        string _propertiesDocumentHash,
-        string _documentDBURL,
+        string calldata _propertiesDocumentHash,
+        string calldata _documentDBURL,
         uint _demandId,
         uint _supplyId
    )
@@ -97,7 +97,7 @@ contract AgreementDB is Owned {
         external
         view 
         onlyOwner
-        returns (Agreement)
+        returns (Agreement memory)
     {
         return allAgreements[_agreementId];        
     }

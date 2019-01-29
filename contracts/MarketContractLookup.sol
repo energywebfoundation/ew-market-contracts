@@ -14,7 +14,7 @@
 //
 // @authors: slock.it GmbH, Martin Kuechler, martin.kuchler@slock.it
 
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.2;
 
 import "ew-utils-general-contracts/contracts/Msc/Owned.sol";
 import "ew-utils-general-contracts/contracts/Interfaces/Updatable.sol";
@@ -25,8 +25,8 @@ import "ew-asset-registry-contracts/contracts/Interfaces/AssetContractLookupInte
 /// @title Contract for storing the current logic-contracts-addresses for the certificate of origin
 contract MarketContractLookup is Owned, MarketContractLookupInterface {
     
-    Updatable public marketLogicRegistry;
-    AssetContractLookupInterface public assetContractLookup;
+    Updatable private marketLogicRegistryContracts;
+    AssetContractLookupInterface public assetContractLookupContract;
 
     /// @notice The constructor 
     constructor() Owned(msg.sender) public{ } 
@@ -44,16 +44,16 @@ contract MarketContractLookup is Owned, MarketContractLookupInterface {
         onlyOwner
     {
         require(    
-            _assetRegistry != address(0) && _marketLogicRegistry != address(0)
-            && marketLogicRegistry == address(0) && assetContractLookup == address(0) && assetContractLookup == address(0),
+            address(_assetRegistry) != address(0x0) && address(_marketLogicRegistry) != address(0x0)
+            && address(marketLogicRegistryContracts) == address(0x0) && address(assetContractLookupContract) == address(0x0),
             "already initialized"
         );
-        require(_marketDB != 0, "marketDB cannot be 0");
+        require(address(_marketDB) != address(0x0), "marketDB cannot be 0");
 
-        marketLogicRegistry = _marketLogicRegistry;
-        assetContractLookup = _assetRegistry;
+        marketLogicRegistryContracts = _marketLogicRegistry;
+        assetContractLookupContract = _assetRegistry;
 
-        marketLogicRegistry.init(_marketDB, msg.sender);
+        marketLogicRegistryContracts.init(_marketDB, msg.sender);
     }
 
    
@@ -65,23 +65,21 @@ contract MarketContractLookup is Owned, MarketContractLookupInterface {
         external
         onlyOwner 
     {
-        require(address(_marketRegistry)!= 0, "update: cannot set to 0");
-        marketLogicRegistry.update(_marketRegistry);
-        marketLogicRegistry = _marketRegistry;
+        require(address(_marketRegistry)!= address(0x0), "update: cannot set to 0");
+        marketLogicRegistryContracts.update(address(_marketRegistry));
+        marketLogicRegistryContracts = _marketRegistry;
     }
 
 	/// @notice marketlogic registry
 	/// @return the marketlogic-registry
     function marketLogicRegistry() external view returns (address){
-        return marketLogicRegistry;
+        return address(marketLogicRegistryContracts);
     }
 
 	/// @notice asset contract lookup
 	/// @return the assetregistry
     function assetContractLookup() external view returns (address){
-        return assetContractLookup;
+        return address(assetContractLookupContract);
     }
-
-
 
 }

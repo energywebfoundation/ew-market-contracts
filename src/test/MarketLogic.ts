@@ -424,6 +424,8 @@ describe('MarketLogic', () => {
             await marketLogic.createAgreement(
                 'propertiesDocumentHash',
                 'documentDBURL',
+                'matcherPropertiesDocumentHash',
+                'matcherDocumentDBURL',
                 0,
                 1,
                 { privateKey: privateKeyDeployment },
@@ -443,6 +445,8 @@ describe('MarketLogic', () => {
             await marketLogic.createAgreement(
                 'propertiesDocumentHash',
                 'documentDBURL',
+                'matcherPropertiesDocumentHash',
+                'matcherDocumentDBURL',
                 0,
                 1,
                 { privateKey: assetOwnerPK },
@@ -462,6 +466,8 @@ describe('MarketLogic', () => {
             await marketLogic.createAgreement(
                 'propertiesDocumentHash',
                 'documentDBURL',
+                'matcherPropertiesDocumentHash',
+                'matcherDocumentDBURL',
                 0,
                 1,
                 { privateKey: traderPK },
@@ -481,6 +487,8 @@ describe('MarketLogic', () => {
             await marketLogic.createAgreement(
                 'propertiesDocumentHash',
                 'documentDBURL',
+                'matcherPropertiesDocumentHash',
+                'matcherDocumentDBURL',
                 1,
                 0,
                 { privateKey: privateKeyDeployment },
@@ -500,6 +508,8 @@ describe('MarketLogic', () => {
             await marketLogic.createAgreement(
                 'propertiesDocumentHash',
                 'documentDBURL',
+                'matcherPropertiesDocumentHash',
+                'matcherDocumentDBURL',
                 1,
                 0,
                 { privateKey: assetOwnerPK },
@@ -519,6 +529,8 @@ describe('MarketLogic', () => {
             await marketLogic.createAgreement(
                 'propertiesDocumentHash',
                 'documentDBURL',
+                'matcherPropertiesDocumentHash',
+                'matcherDocumentDBURL',
                 1,
                 0,
                 { privateKey: traderPK },
@@ -538,6 +550,8 @@ describe('MarketLogic', () => {
             await marketLogic.createAgreement(
                 'propertiesDocumentHash',
                 'documentDBURL',
+                'matcherPropertiesDocumentHash',
+                'matcherDocumentDBURL',
                 1,
                 1,
                 { privateKey: privateKeyDeployment },
@@ -557,6 +571,8 @@ describe('MarketLogic', () => {
             await marketLogic.createAgreement(
                 'propertiesDocumentHash',
                 'documentDBURL',
+                'matcherPropertiesDocumentHash',
+                'matcherDocumentDBURL',
                 1,
                 1,
                 { privateKey: assetOwnerPK },
@@ -576,6 +592,8 @@ describe('MarketLogic', () => {
             await marketLogic.createAgreement(
                 'propertiesDocumentHash',
                 'documentDBURL',
+                'matcherPropertiesDocumentHash',
+                'matcherDocumentDBURL',
                 1,
                 1,
                 { privateKey: traderPK },
@@ -595,6 +613,8 @@ describe('MarketLogic', () => {
             await marketLogic.createAgreement(
                 'propertiesDocumentHash',
                 'documentDBURL',
+                'matcherPropertiesDocumentHash',
+                'matcherDocumentDBURL',
                 0,
                 0,
                 { privateKey: privateKeyDeployment },
@@ -632,6 +652,8 @@ describe('MarketLogic', () => {
         const tx = await marketLogic.createAgreement(
             'propertiesDocumentHash',
             'documentDBURL',
+            'matcherPropertiesDocumentHash',
+            'matcherDocumentDBURL',
             0,
             0,
             { privateKey: assetOwnerPK },
@@ -705,12 +727,16 @@ describe('MarketLogic', () => {
         assert.deepEqual(agreement, {
             0: 'propertiesDocumentHash',
             1: 'documentDBURL',
-            2: '0',
-            3: '0',
-            4: true,
-            5: false,
+            2: 'matcherPropertiesDocumentHash',
+            3: 'matcherDocumentDBURL',
+            4: '0',
+            5: '0',
+            6: true,
+            7: false,
             _propertiesDocumentHash: 'propertiesDocumentHash',
             _documentDBURL: 'documentDBURL',
+            _matcherPropertiesDocumentHash: 'matcherPropertiesDocumentHash',
+            _matcherDBURL: 'matcherDocumentDBURL',
             _demandId: '0',
             _supplyId: '0',
             _approvedBySupplyOwner: true,
@@ -747,12 +773,16 @@ describe('MarketLogic', () => {
         assert.deepEqual(agreement, {
             0: 'propertiesDocumentHash',
             1: 'documentDBURL',
-            2: '0',
-            3: '0',
-            4: true,
-            5: true,
+            2: 'matcherPropertiesDocumentHash',
+            3: 'matcherDocumentDBURL',
+            4: '0',
+            5: '0',
+            6: true,
+            7: true,
             _propertiesDocumentHash: 'propertiesDocumentHash',
             _documentDBURL: 'documentDBURL',
+            _matcherPropertiesDocumentHash: 'matcherPropertiesDocumentHash',
+            _matcherDBURL: 'matcherDocumentDBURL',
             _demandId: '0',
             _supplyId: '0',
             _approvedBySupplyOwner: true,
@@ -816,6 +846,8 @@ describe('MarketLogic', () => {
         const tx = await marketLogic.createAgreement(
             'propertiesDocumentHash_2',
             'documentDBURL_2',
+            'matcherPropertiesDocumentHash_2',
+            'matcherDocumentDBURL_2',
             1,
             1,
             { privateKey: traderPK },
@@ -845,12 +877,16 @@ describe('MarketLogic', () => {
         assert.deepEqual(agreement, {
             0: 'propertiesDocumentHash_2',
             1: 'documentDBURL_2',
-            2: '1',
-            3: '1',
-            4: false,
-            5: true,
+            2: 'matcherPropertiesDocumentHash_2',
+            3: 'matcherDocumentDBURL_2',
+            4: '1',
+            5: '1',
+            6: false,
+            7: true,
             _propertiesDocumentHash: 'propertiesDocumentHash_2',
             _documentDBURL: 'documentDBURL_2',
+            _matcherPropertiesDocumentHash: 'matcherPropertiesDocumentHash_2',
+            _matcherDBURL: 'matcherDocumentDBURL_2',
             _demandId: '1',
             _supplyId: '1',
             _approvedBySupplyOwner: false,
@@ -918,19 +954,23 @@ describe('MarketLogic', () => {
         }
     });
 
-    it('should return the (not yet full) 2nd agreement', async () => {
+    it('should return the  2nd agreement', async () => {
 
         const agreement = await marketLogic.getAgreement(1);
 
         assert.deepEqual(agreement, {
             0: 'propertiesDocumentHash_2',
             1: 'documentDBURL_2',
-            2: '1',
-            3: '1',
-            4: true,
-            5: true,
+            2: 'matcherPropertiesDocumentHash_2',
+            3: 'matcherDocumentDBURL_2',
+            4: '1',
+            5: '1',
+            6: true,
+            7: true,
             _propertiesDocumentHash: 'propertiesDocumentHash_2',
             _documentDBURL: 'documentDBURL_2',
+            _matcherPropertiesDocumentHash: 'matcherPropertiesDocumentHash_2',
+            _matcherDBURL: 'matcherDocumentDBURL_2',
             _demandId: '1',
             _supplyId: '1',
             _approvedBySupplyOwner: true,

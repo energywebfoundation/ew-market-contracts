@@ -78,6 +78,8 @@ contract AgreementLogic is RoleManagement, Updatable {
             _supplyId
         );
 
+        setAgreementMatcher(agreementId);
+
         if(msg.sender == demand.demandOwner){
             approveAgreementDemand(agreementId);
         }
@@ -161,7 +163,6 @@ contract AgreementLogic is RoleManagement, Updatable {
         
         // we approve a demand. If it's returning true it means that both supply and demand are approved thus making the agreement complete
         if(db.approveAgreementDemandDB(_agreementId)) {
-            setAgreementMatcher(_agreementId);
             emit LogAgreementFullySigned(_agreementId, agreement.demandId, agreement.supplyId);
         }    
     }
@@ -178,7 +179,6 @@ contract AgreementLogic is RoleManagement, Updatable {
         
         // we approve a supply. If it's returning true it means that both supply and demand are approved thus making the agreement complete
         if(db.approveAgreementSupplyDB(_agreementId)){
-            setAgreementMatcher(_agreementId);
             emit LogAgreementFullySigned(_agreementId, agreement.demandId, agreement.supplyId);
         }  
     }
@@ -191,7 +191,7 @@ contract AgreementLogic is RoleManagement, Updatable {
     {
         MarketDB.Agreement memory agreement = db.getAgreementDB(_agreementId);
 
-        require(agreement.allowedMatcher.length == 0, "matcher already set");
+        assert(agreement.allowedMatcher.length == 0);
         MarketDB.Supply memory supply = db.getSupply(agreement.supplyId);
 
         (,,,,,address[] memory matcherArray,,,,) = AssetGeneralInterface(assetContractLookup.assetProducingRegistry()).getAssetGeneral(supply.assetId);

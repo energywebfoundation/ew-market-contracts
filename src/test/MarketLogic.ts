@@ -736,7 +736,7 @@ describe('MarketLogic', () => {
             5: '0',
             6: true,
             7: false,
-            8: [],
+            8: ['0x1000000000000000000000000000000000000006'],
             _propertiesDocumentHash: 'propertiesDocumentHash',
             _documentDBURL: 'documentDBURL',
             _matcherPropertiesDocumentHash: 'matcherPropertiesDocumentHash',
@@ -745,7 +745,7 @@ describe('MarketLogic', () => {
             _supplyId: '0',
             _approvedBySupplyOwner: true,
             _approvedByDemandOwner: false,
-            _allowedMatcher: [],
+            _allowedMatcher: ['0x1000000000000000000000000000000000000006'],
         });
 
     });
@@ -935,7 +935,7 @@ describe('MarketLogic', () => {
             5: '1',
             6: false,
             7: true,
-            8: [],
+            8: ['0x1000000000000000000000000000000000000006'],
             _propertiesDocumentHash: 'propertiesDocumentHash_2',
             _documentDBURL: 'documentDBURL_2',
             _matcherPropertiesDocumentHash: 'matcherPropertiesDocumentHash_2',
@@ -944,7 +944,7 @@ describe('MarketLogic', () => {
             _supplyId: '1',
             _approvedBySupplyOwner: false,
             _approvedByDemandOwner: true,
-            _allowedMatcher: [],
+            _allowedMatcher: ['0x1000000000000000000000000000000000000006'],
         });
 
     });

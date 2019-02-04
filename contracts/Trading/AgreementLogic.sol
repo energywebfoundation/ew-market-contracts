@@ -47,7 +47,7 @@ contract AgreementLogic is RoleManagement, Updatable {
         assetContractLookup = _assetContractLookup;
     }
 
-	/// @notice Function to create a demand
+	/// @notice Function to create a agreement
 	/// @dev will return an event with the event-Id
 	/// @param _propertiesDocumentHash document-hash with all the properties of the demand
 	/// @param _documentDBURL url-address of the demand

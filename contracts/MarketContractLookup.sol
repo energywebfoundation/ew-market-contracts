@@ -28,6 +28,7 @@ contract MarketContractLookup is Owned, MarketContractLookupInterface {
     Updatable private marketLogicRegistryContracts;
     AssetContractLookupInterface public assetContractLookupContract;
 
+
     /// @notice The constructor 
     constructor() Owned(msg.sender) public{ } 
 
@@ -44,8 +45,10 @@ contract MarketContractLookup is Owned, MarketContractLookupInterface {
         onlyOwner
     {
         require(    
-            address(_assetRegistry) != address(0x0) && address(_marketLogicRegistry) != address(0x0)
-            && address(marketLogicRegistryContracts) == address(0x0) && address(assetContractLookupContract) == address(0x0),
+            address(_assetRegistry) != address(0x0)
+            && address(_marketLogicRegistry) != address(0x0)
+            && address(marketLogicRegistryContracts) == address(0x0) 
+            && address(assetContractLookupContract) == address(0x0),
             "already initialized"
         );
         require(address(_marketDB) != address(0x0), "marketDB cannot be 0");

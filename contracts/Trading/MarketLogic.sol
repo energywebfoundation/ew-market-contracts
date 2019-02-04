@@ -51,7 +51,7 @@ contract MarketLogic is AgreementLogic {
         emit createdNewDemand(msg.sender, demandID);
     }
 
-	/// @notice Function to create a demand
+	/// @notice Function to create a supply
 	/// @dev will return an event with the event-Id
 	/// @param _propertiesDocumentHash document-hash with all the properties of the demand
 	/// @param _documentDBURL url-address of the demand

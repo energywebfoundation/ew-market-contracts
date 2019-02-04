@@ -91,7 +91,7 @@ contract MarketDB is AgreementDB {
         _supplyId = allSupply.length>0?allSupply.length-1:0;
     }
 
-	/// @notice funtion to retrieve the length of the allagreements-array
+	/// @notice funtion to retrieve the length of the demands-array
 	/// @return the length of the allagreements-array
     function getAllDemandListLength() 
         external
@@ -102,7 +102,7 @@ contract MarketDB is AgreementDB {
         return allDemands.length;
     }
 
-	/// @notice funtion to retrieve the length of the allagreements-array
+	/// @notice funtion to retrieve the length of the supply-array
 	/// @return the length of the allagreements-array
     function getAllSupplyListLength() 
         external
@@ -115,9 +115,9 @@ contract MarketDB is AgreementDB {
 
  
 
-	/// @notice Returns a agreement-struct
-	/// @param _demandId id of a agreement
-	/// @return returns a agreement-struct
+	/// @notice Returns a demand-struct
+	/// @param _demandId id of a demand
+	/// @return returns a demand-struct
     function getDemand(uint _demandId)
         external
         view 
@@ -127,9 +127,9 @@ contract MarketDB is AgreementDB {
         return allDemands[_demandId];        
     }
 
-	/// @notice Returns a agreement-struct
-	/// @param _supplyId id of a agreement
-	/// @return returns a agreement-struct
+	/// @notice Returns a supply-struct
+	/// @param _supplyId id of a supply
+	/// @return returns a supply-struct
     function getSupply(uint _supplyId)
         external
         view 

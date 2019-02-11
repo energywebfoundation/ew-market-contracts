@@ -1,6 +1,6 @@
 // Copyright 2018 Energy Web Foundation
 // This file is part of the Origin Application brought to you by the Energy Web Foundation,
-// a global non-profit organization focused on accelerating blockchain technology across the energy sector, 
+// a global non-profit organization focused on accelerating blockchain technology across the energy sector,
 // incorporated in Zug, Switzerland.
 //
 // The Origin Application is free software: you can redistribute it and/or modify
@@ -12,7 +12,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details, at <http://www.gnu.org/licenses/>.
 //
-// @authors: Martin Kuechler, martin.kuechler@slock.it
+// @authors: slock.it GmbH; Martin Kuechler, martin.kuchler@slock.it; Heiko Burkhardt, heiko.burkhardt@slock.it
 
 pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
@@ -33,16 +33,16 @@ contract AgreementLogic is RoleManagement, Updatable {
 
     /// @notice database contract
     MarketDB public db;
-    
+
     AssetContractLookupInterface public assetContractLookup;
 
     /// @notice constructor
     constructor(
         AssetContractLookupInterface _assetContractLookup,
         MarketContractLookupInterface _marketContractLookup
-    ) 
-        RoleManagement(UserContractLookupInterface(_assetContractLookup.userRegistry()), address(_marketContractLookup)) 
-        public 
+    )
+        RoleManagement(UserContractLookupInterface(_assetContractLookup.userRegistry()), address(_marketContractLookup))
+        public
     {
         assetContractLookup = _assetContractLookup;
     }
@@ -53,7 +53,7 @@ contract AgreementLogic is RoleManagement, Updatable {
 	/// @param _documentDBURL url-address of the demand
 	/// @param _demandId the demand Id
 	/// @param _supplyId the supply Id
-    function createAgreement( 
+    function createAgreement(
         string calldata _propertiesDocumentHash,
         string calldata _documentDBURL,
         uint _demandId,
@@ -74,14 +74,14 @@ contract AgreementLogic is RoleManagement, Updatable {
         if(msg.sender == supplyOwner){
             approveAgreementSupply(agreementId);
         }
-        
+
         emit LogAgreementCreated(agreementId, _demandId, _supplyId);
     }
 
 	/// @notice fuction to set the database contract, can only be called once
 	/// @param _database the database contract
 	/// @param _admin the admin
-    function init(address _database, address _admin) 
+    function init(address _database, address _admin)
         public
         onlyOwner
     {
@@ -91,12 +91,12 @@ contract AgreementLogic is RoleManagement, Updatable {
 
 	/// @notice Updates the logic contract
 	/// @param _newLogic Address of the new logic contract
-    function update(address _newLogic) 
+    function update(address _newLogic)
         external
-        onlyOwner    
+        onlyOwner
     {
         db.changeOwner(_newLogic);
-    }  
+    }
 
 	/// @notice get all agreement list length
 	/// @return length of the allAgreements-array
@@ -108,8 +108,8 @@ contract AgreementLogic is RoleManagement, Updatable {
 	/// @param _agreementId the agreement Id
 	/// @return the agreement
     function getAgreement(uint _agreementId)
-        external 
-        view 
+        external
+        view
         returns (
             string memory _propertiesDocumentHash,
             string memory _documentDBURL,
@@ -130,32 +130,32 @@ contract AgreementLogic is RoleManagement, Updatable {
 
 	/// @notice approves a demand for an agreement
 	/// @param _agreementId the agreement Id
-    function approveAgreementDemand(uint _agreementId) 
+    function approveAgreementDemand(uint _agreementId)
         public
     {
         MarketDB.Agreement memory agreement = db.getAgreementDB(_agreementId);
         require(db.getDemand(agreement.demandId).demandOwner == msg.sender, "approveAgreementDemand: wrong msg.sender");
-        
+
         // we approve a demand. If it's returning true it means that both supply and demand are approved thus making the agreement complete
         if(db.approveAgreementDemandDB(_agreementId)) {
             emit LogAgreementFullySigned(_agreementId, agreement.demandId, agreement.supplyId);
-        }    
+        }
     }
 
 	/// @notice approves a supply for an agreement
 	/// @param _agreementId the agreement Id
-    function approveAgreementSupply(uint _agreementId) 
+    function approveAgreementSupply(uint _agreementId)
         public
     {
         MarketDB.Agreement memory agreement = db.getAgreementDB(_agreementId);
         MarketDB.Supply memory supply = db.getSupply(agreement.supplyId);
-        
+
         require(AssetGeneralInterface(assetContractLookup.assetProducingRegistry()).getAssetOwner(supply.assetId) == msg.sender, "approveAgreementSupply: wrong msg.sender");
-        
+
         // we approve a supply. If it's returning true it means that both supply and demand are approved thus making the agreement complete
         if(db.approveAgreementSupplyDB(_agreementId)){
             emit LogAgreementFullySigned(_agreementId, agreement.demandId, agreement.supplyId);
-        }  
+        }
     }
 
 }

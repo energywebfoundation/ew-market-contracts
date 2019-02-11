@@ -1,6 +1,6 @@
 // Copyright 2018 Energy Web Foundation
 // This file is part of the Origin Application brought to you by the Energy Web Foundation,
-// a global non-profit organization focused on accelerating blockchain technology across the energy sector, 
+// a global non-profit organization focused on accelerating blockchain technology across the energy sector,
 // incorporated in Zug, Switzerland.
 //
 // The Origin Application is free software: you can redistribute it and/or modify
@@ -12,7 +12,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details, at <http://www.gnu.org/licenses/>.
 //
-// @authors: slock.it GmbH, Martin Kuechler, martin.kuchler@slock.it
+// @authors: slock.it GmbH; Martin Kuechler, martin.kuchler@slock.it; Heiko Burkhardt, heiko.burkhardt@slock.it
 
 pragma solidity ^0.5.2;
 
@@ -24,26 +24,26 @@ import "ew-asset-registry-contracts/contracts/Interfaces/AssetContractLookupInte
 
 /// @title Contract for storing the current logic-contracts-addresses for the certificate of origin
 contract MarketContractLookup is Owned, MarketContractLookupInterface {
-    
+
     Updatable private marketLogicRegistryContracts;
     AssetContractLookupInterface public assetContractLookupContract;
 
-    /// @notice The constructor 
-    constructor() Owned(msg.sender) public{ } 
+    /// @notice The constructor
+    constructor() Owned(msg.sender) public{ }
 
 	/// @notice function to initialize the contracts, setting the needed contract-addresses
 	/// @param _assetRegistry the asset Registry
 	/// @param _marketLogicRegistry the market Logic Registry
 	/// @param _marketDB the market D B
     function init(
-        AssetContractLookupInterface _assetRegistry, 
-        Updatable _marketLogicRegistry, 
-        address _marketDB 
-    ) 
+        AssetContractLookupInterface _assetRegistry,
+        Updatable _marketLogicRegistry,
+        address _marketDB
+    )
         external
         onlyOwner
     {
-        require(    
+        require(
             address(_assetRegistry) != address(0x0) && address(_marketLogicRegistry) != address(0x0)
             && address(marketLogicRegistryContracts) == address(0x0) && address(assetContractLookupContract) == address(0x0),
             "already initialized"
@@ -56,14 +56,14 @@ contract MarketContractLookup is Owned, MarketContractLookupInterface {
         marketLogicRegistryContracts.init(_marketDB, msg.sender);
     }
 
-   
+
 	/// @notice function to update one or more logic-contracts
 	/// @param _marketRegistry address of the new user-registry-logic-contract
     function update(
         Updatable _marketRegistry
     )
         external
-        onlyOwner 
+        onlyOwner
     {
         require(address(_marketRegistry)!= address(0x0), "update: cannot set to 0");
         marketLogicRegistryContracts.update(address(_marketRegistry));

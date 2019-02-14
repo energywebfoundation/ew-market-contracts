@@ -1,6 +1,6 @@
 // Copyright 2018 Energy Web Foundation
 // This file is part of the Origin Application brought to you by the Energy Web Foundation,
-// a global non-profit organization focused on accelerating blockchain technology across the energy sector, 
+// a global non-profit organization focused on accelerating blockchain technology across the energy sector,
 // incorporated in Zug, Switzerland.
 //
 // The Origin Application is free software: you can redistribute it and/or modify
@@ -12,7 +12,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details, at <http://www.gnu.org/licenses/>.
 //
-// @authors: slock.it GmbH, Martin Kuechler, martin.kuechler@slock.it
+// @authors: slock.it GmbH; Martin Kuechler, martin.kuchler@slock.it; Heiko Burkhardt, heiko.burkhardt@slock.it
+
 pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
@@ -25,14 +26,14 @@ contract MarketLogic is AgreementLogic {
 
     event createdNewDemand(address _sender, uint indexed _demandId);
     event createdNewSupply(address _sender, uint indexed _supplyId);
-    
+
     /// @notice constructor
     constructor(
         AssetContractLookupInterface _assetContractLookup,
         MarketContractLookupInterface _marketContractLookup
-    ) 
-        AgreementLogic(_assetContractLookup,_marketContractLookup) 
-        public 
+    )
+        AgreementLogic(_assetContractLookup,_marketContractLookup)
+        public
     {
     }
 
@@ -40,7 +41,7 @@ contract MarketLogic is AgreementLogic {
 	/// @dev will return an event with the event-Id
 	/// @param _propertiesDocumentHash document-hash with all the properties of the demand
 	/// @param _documentDBURL url-address of the demand
-    function createDemand( 
+    function createDemand(
         string calldata _propertiesDocumentHash,
         string calldata _documentDBURL
     )
@@ -56,13 +57,13 @@ contract MarketLogic is AgreementLogic {
 	/// @param _propertiesDocumentHash document-hash with all the properties of the demand
 	/// @param _documentDBURL url-address of the demand
 	/// @param _assetId the asset Id
-    function createSupply( 
+    function createSupply(
         string calldata _propertiesDocumentHash,
         string calldata _documentDBURL,
         uint _assetId
     )
         external
-     {  
+     {
         require(AssetGeneralInterface(assetContractLookup.assetProducingRegistry()).getAssetOwner(_assetId) == msg.sender, "wrong msg.sender");
         uint supplyID = db.createSupply(_propertiesDocumentHash, _documentDBURL, _assetId);
         emit createdNewSupply(msg.sender, supplyID);
@@ -83,9 +84,9 @@ contract MarketLogic is AgreementLogic {
 	/// @notice Returns the information of a demand
 	/// @param _demandId index of the demand in the allDemands-array
 	/// @return propertiesDocumentHash, documentDBURL and owner
-    function getDemand(uint _demandId) 
-        external 
-        view 
+    function getDemand(uint _demandId)
+        external
+        view
         returns (
             string memory _propertiesDocumentHash,
             string memory _documentDBURL,
@@ -102,8 +103,8 @@ contract MarketLogic is AgreementLogic {
 	/// @param _supplyId the supply Id
 	/// @return the supply
     function getSupply(uint _supplyId)
-        external 
-        view 
+        external
+        view
         returns (
             string memory _propertiesDocumentHash,
             string memory _documentDBURL,
@@ -114,6 +115,6 @@ contract MarketLogic is AgreementLogic {
         _propertiesDocumentHash = supply.propertiesDocumentHash;
         _documentDBURL = supply.documentDBURL;
         _assetId = supply.assetId;
-    } 
+    }
 
 }

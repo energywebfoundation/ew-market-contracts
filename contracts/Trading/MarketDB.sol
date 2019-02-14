@@ -1,6 +1,6 @@
 // Copyright 2018 Energy Web Foundation
 // This file is part of the Origin Application brought to you by the Energy Web Foundation,
-// a global non-profit organization focused on accelerating blockchain technology across the energy sector, 
+// a global non-profit organization focused on accelerating blockchain technology across the energy sector,
 // incorporated in Zug, Switzerland.
 //
 // The Origin Application is free software: you can redistribute it and/or modify
@@ -12,7 +12,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details, at <http://www.gnu.org/licenses/>.
 //
-// @authors: slock.it GmbH, Martin Kuechler, martin.kuchler@slock.it
+// @authors: slock.it GmbH; Martin Kuechler, martin.kuchler@slock.it; Heiko Burkhardt, heiko.burkhardt@slock.it
+
 pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
@@ -21,7 +22,7 @@ import "../../contracts/Trading/AgreementDB.sol";
 /// @title The Database contract for the AgreementDB of Origin list
 /// @notice This contract only provides getter and setter methods and only its logic-contract is able to call the functions
 contract MarketDB is AgreementDB {
-    
+
     /// @notice struct for gather all information
     struct Demand {
         string propertiesDocumentHash;
@@ -40,10 +41,10 @@ contract MarketDB is AgreementDB {
 
     /// @notice list with all supplies
     Supply[] private allSupply;
-    
+
     /// @notice Constructor
     /// @param _owner The owner of the contract
-    constructor(address _owner) public Owned(_owner) {} 
+    constructor(address _owner) public Owned(_owner) {}
 
 	/// @notice creates a demand
 	/// @param _propertiesDocumentHash the properties document hash
@@ -93,7 +94,7 @@ contract MarketDB is AgreementDB {
 
 	/// @notice funtion to retrieve the length of the demands-array
 	/// @return the length of the allagreements-array
-    function getAllDemandListLength() 
+    function getAllDemandListLength()
         external
         view
         onlyOwner
@@ -104,7 +105,7 @@ contract MarketDB is AgreementDB {
 
 	/// @notice funtion to retrieve the length of the supply-array
 	/// @return the length of the allagreements-array
-    function getAllSupplyListLength() 
+    function getAllSupplyListLength()
         external
         view
         onlyOwner
@@ -113,18 +114,18 @@ contract MarketDB is AgreementDB {
         return allSupply.length;
     }
 
- 
+
 
 	/// @notice Returns a demand-struct
 	/// @param _demandId id of a demand
 	/// @return returns a demand-struct
     function getDemand(uint _demandId)
         external
-        view 
+        view
         onlyOwner
         returns (Demand memory)
     {
-        return allDemands[_demandId];        
+        return allDemands[_demandId];
     }
 
 	/// @notice Returns a supply-struct
@@ -132,14 +133,10 @@ contract MarketDB is AgreementDB {
 	/// @return returns a supply-struct
     function getSupply(uint _supplyId)
         external
-        view 
+        view
         onlyOwner
         returns (Supply memory)
     {
-        return allSupply[_supplyId];        
+        return allSupply[_supplyId];
     }
 }
-
-
-
-

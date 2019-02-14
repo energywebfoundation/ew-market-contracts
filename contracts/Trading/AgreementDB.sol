@@ -1,6 +1,6 @@
 // Copyright 2018 Energy Web Foundation
 // This file is part of the Origin Application brought to you by the Energy Web Foundation,
-// a global non-profit organization focused on accelerating blockchain technology across the energy sector, 
+// a global non-profit organization focused on accelerating blockchain technology across the energy sector,
 // incorporated in Zug, Switzerland.
 //
 // The Origin Application is free software: you can redistribute it and/or modify
@@ -12,7 +12,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details, at <http://www.gnu.org/licenses/>.
 //
-// @authors: Martin Kuechler, martin.kuechler@slock.it
+// @authors: slock.it GmbH; Martin Kuechler, martin.kuchler@slock.it; Heiko Burkhardt, heiko.burkhardt@slock.it
 
 pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
@@ -29,20 +29,20 @@ contract AgreementDB is Owned {
         bool approvedBySupplyOwner;
         bool approvedByDemandOwner;
     }
-   
+
     /// @notice list with all created agreements
     Agreement[] private allAgreements;
 
-    
+
 	/// @notice approves an demand for an agreement
-	/// @param _agreementId the agreement Id 
+	/// @param _agreementId the agreement Id
 	/// @return true when both supply and demand agreed
-    function approveAgreementDemandDB(uint _agreementId) 
+    function approveAgreementDemandDB(uint _agreementId)
         onlyOwner
         external
         returns (bool)
     {
-        Agreement storage a = allAgreements[_agreementId]; 
+        Agreement storage a = allAgreements[_agreementId];
         a.approvedByDemandOwner = true;
         return (a.approvedByDemandOwner && a.approvedBySupplyOwner);
     }
@@ -50,12 +50,12 @@ contract AgreementDB is Owned {
 	/// @notice approves an supply for an agreement
 	/// @param _agreementId the agreement Id
 	/// @return true when both supply and demand agreed
-    function approveAgreementSupplyDB(uint _agreementId) 
+    function approveAgreementSupplyDB(uint _agreementId)
         onlyOwner
         external
         returns (bool)
     {
-        Agreement storage a = allAgreements[_agreementId]; 
+        Agreement storage a = allAgreements[_agreementId];
         a.approvedBySupplyOwner = true;
         return (a.approvedByDemandOwner && a.approvedBySupplyOwner);
     }
@@ -67,7 +67,7 @@ contract AgreementDB is Owned {
 	/// @param _supplyId the supply Id
 	/// @return the index and thus the identifier of a agreement
     function createAgreementDB
-    (  
+    (
         string calldata _propertiesDocumentHash,
         string calldata _documentDBURL,
         uint _demandId,
@@ -86,8 +86,8 @@ contract AgreementDB is Owned {
             approvedBySupplyOwner: false,
             approvedByDemandOwner: false
         }));
-        _agreementId = allAgreements.length>0?allAgreements.length-1:0;  
-      
+        _agreementId = allAgreements.length>0?allAgreements.length-1:0;
+
     }
 
 	/// @notice Returns a agreement-struct
@@ -95,16 +95,16 @@ contract AgreementDB is Owned {
 	/// @return returns a agreement-struct
     function getAgreementDB(uint _agreementId)
         external
-        view 
+        view
         onlyOwner
         returns (Agreement memory)
     {
-        return allAgreements[_agreementId];        
+        return allAgreements[_agreementId];
     }
 
 	/// @notice funtion to retrieve the length of the allagreements-array
 	/// @return the length of the allagreements-array
-    function getAllAgreementListLengthDB() 
+    function getAllAgreementListLengthDB()
         external
         view
         onlyOwner

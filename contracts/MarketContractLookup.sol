@@ -43,9 +43,11 @@ contract MarketContractLookup is Owned, MarketContractLookupInterface {
         external
         onlyOwner
     {
-        require(
-            address(_assetRegistry) != address(0x0) && address(_marketLogicRegistry) != address(0x0)
-            && address(marketLogicRegistryContracts) == address(0x0) && address(assetContractLookupContract) == address(0x0),
+        require(    
+            address(_assetRegistry) != address(0x0)
+            && address(_marketLogicRegistry) != address(0x0)
+            && address(marketLogicRegistryContracts) == address(0x0) 
+            && address(assetContractLookupContract) == address(0x0),
             "already initialized"
         );
         require(address(_marketDB) != address(0x0), "marketDB cannot be 0");

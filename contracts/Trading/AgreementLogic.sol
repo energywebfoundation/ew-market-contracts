@@ -47,7 +47,7 @@ contract AgreementLogic is RoleManagement, Updatable {
         assetContractLookup = _assetContractLookup;
     }
 
-	/// @notice Function to create a demand
+	/// @notice Function to create a agreement
 	/// @dev will return an event with the event-Id
 	/// @param _propertiesDocumentHash document-hash with all the properties of the demand
 	/// @param _documentDBURL url-address of the demand
@@ -56,6 +56,8 @@ contract AgreementLogic is RoleManagement, Updatable {
     function createAgreement(
         string calldata _propertiesDocumentHash,
         string calldata _documentDBURL,
+        string calldata _matcherPropertiesDocumentHash,
+        string calldata _matcherDBURL,
         uint _demandId,
         uint _supplyId
     )
@@ -67,7 +69,17 @@ contract AgreementLogic is RoleManagement, Updatable {
         address supplyOwner = AssetGeneralInterface(assetContractLookup.assetProducingRegistry()).getAssetOwner(supply.assetId);
 
         require(msg.sender == demand.demandOwner || msg.sender == supplyOwner, "createDemand: wrong owner when creating");
-        uint agreementId = db.createAgreementDB(_propertiesDocumentHash, _documentDBURL, _demandId, _supplyId);
+        uint agreementId = db.createAgreementDB(
+            _propertiesDocumentHash, 
+            _documentDBURL,
+            _matcherPropertiesDocumentHash,
+            _matcherDBURL,
+            _demandId, 
+            _supplyId
+        );
+
+        setAgreementMatcher(agreementId);
+
         if(msg.sender == demand.demandOwner){
             approveAgreementDemand(agreementId);
         }
@@ -113,20 +125,33 @@ contract AgreementLogic is RoleManagement, Updatable {
         returns (
             string memory _propertiesDocumentHash,
             string memory _documentDBURL,
+            string memory _matcherPropertiesDocumentHash,
+            string memory _matcherDBURL,
             uint _demandId,
             uint _supplyId,
             bool _approvedBySupplyOwner,
-            bool _approvedByDemandOwner
+            bool _approvedByDemandOwner,
+            address[] memory _allowedMatcher
         )
     {
         MarketDB.Agreement memory agreement = db.getAgreementDB(_agreementId);
         _propertiesDocumentHash = agreement.propertiesDocumentHash;
         _documentDBURL = agreement.documentDBURL;
+        _matcherPropertiesDocumentHash = agreement.matcherPropertiesDocumentHash;
+        _matcherDBURL = agreement.matcherDBURL;
         _demandId = agreement.demandId;
         _supplyId = agreement.supplyId;
         _approvedBySupplyOwner = agreement.approvedBySupplyOwner;
         _approvedByDemandOwner = agreement.approvedByDemandOwner;
+        _allowedMatcher = agreement.allowedMatcher;
     }
+
+    function getAgreementStruct(uint _agreementId)
+        external
+        view
+        returns (MarketDB.Agreement memory){
+            return db.getAgreementDB(_agreementId);
+        }
 
 	/// @notice approves a demand for an agreement
 	/// @param _agreementId the agreement Id
@@ -158,4 +183,53 @@ contract AgreementLogic is RoleManagement, Updatable {
         }
     }
 
+    /// @notice sets the matcher for an agreement
+    /// @dev can only be called as long as there are no matchers set
+    /// @param _agreementId the agreement-Id
+    function setAgreementMatcher(uint _agreementId) 
+        internal 
+    {
+        MarketDB.Agreement memory agreement = db.getAgreementDB(_agreementId);
+
+        assert(agreement.allowedMatcher.length == 0);
+        MarketDB.Supply memory supply = db.getSupply(agreement.supplyId);
+
+        (,,,,,address[] memory matcherArray,,,,) = AssetGeneralInterface(assetContractLookup.assetProducingRegistry()).getAssetGeneral(supply.assetId);
+
+        db.setAgreementMatcher( _agreementId, matcherArray);
+    }
+
+    /// @notice allows matcher to change the matcher-properties for an agreement
+    /// @param _agreementId the agreement-ID
+    /// @param _matcherPropertiesDocumentHash document-hash of the matcher properties
+    /// @param _matcherDBURL db-url of the document-hash
+    function setMatcherProperties(
+        uint _agreementId,
+        string calldata _matcherPropertiesDocumentHash,
+        string calldata _matcherDBURL
+    )
+        external
+    {
+        MarketDB.Agreement memory agreement = db.getAgreementDB(_agreementId);
+
+        require(agreement.approvedBySupplyOwner, "supply owner has not agreed yet");
+        require(agreement.approvedByDemandOwner, "demand owner has not agreed yet");
+        address[] memory agreementMatcher = agreement.allowedMatcher;
+        
+        bool foundMatcher = false;
+
+        // we have to check all the matchers
+        for(uint i=0; i < agreementMatcher.length; i++){
+
+            if ( agreementMatcher[i] == msg.sender) {
+                foundMatcher = true;
+                break;
+            }
+        }
+
+        require(foundMatcher, "sender is not in matcher array");
+
+        db.setMatcherPropertiesAndURL(_agreementId, _matcherPropertiesDocumentHash, _matcherDBURL);
+    
+    }
 }

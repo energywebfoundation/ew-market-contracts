@@ -17,6 +17,7 @@
 import MarketContractLookupJSON from '../contract-build/MarketContractLookup.json';
 import MarketDBJSON from '../contract-build/MarketDB.json';
 import MarketLogicJSON from '../contract-build/MarketLogic.json';
+import AgreementLogicJSON from '../contract-build/AgreementLogic.json';
 
 export { MarketContractLookupJSON, MarketDBJSON, MarketLogicJSON };
 export { MarketLogic } from './wrappedContracts/MarketLogic';

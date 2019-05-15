@@ -26,13 +26,15 @@ import { MarketDB } from '../wrappedContracts/MarketDB';
 import { MarketLogic } from '../wrappedContracts/MarketLogic';
 import { MarketContractLookupJSON, MarketLogicJSON, MarketDBJSON } from '..';
 describe('MarketContractLookup', () => {
-
-    const configFile = JSON.parse(fs.readFileSync(process.cwd() + '/connection-config.json', 'utf8'));
+    const configFile = JSON.parse(
+        fs.readFileSync(process.cwd() + '/connection-config.json', 'utf8')
+    );
 
     const web3 = new Web3(configFile.develop.web3);
 
-    const privateKeyDeployment = configFile.develop.deployKey.startsWith('0x') ?
-        configFile.develop.deployKey : '0x' + configFile.develop.deployKey;
+    const privateKeyDeployment = configFile.develop.deployKey.startsWith('0x')
+        ? configFile.develop.deployKey
+        : '0x' + configFile.develop.deployKey;
 
     const accountDeployment = web3.eth.accounts.privateKeyToAccount(privateKeyDeployment).address;
 
@@ -43,11 +45,10 @@ describe('MarketContractLookup', () => {
     let isGanache: boolean;
 
     it('should deploy the contracts', async () => {
-
         isGanache = true;
         const userContracts = await migrateUserRegistryContracts(web3, privateKeyDeployment);
 
-        const userLogic = new UserLogic((web3 as any), (userContracts as any).UserLogic);
+        const userLogic = new UserLogic(web3 as any, (userContracts as any).UserLogic);
 
         await userLogic.setUser(accountDeployment, 'admin', { privateKey: privateKeyDeployment });
 
@@ -55,16 +56,23 @@ describe('MarketContractLookup', () => {
 
         const userContractLookupAddr = (userContracts as any).UserContractLookup;
 
-        const assetContracts = await migrateAssetRegistryContracts(web3, userContractLookupAddr, privateKeyDeployment);
+        const assetContracts = await migrateAssetRegistryContracts(
+            web3,
+            userContractLookupAddr,
+            privateKeyDeployment
+        );
 
         const assetRegistryLookupAddr = (assetContracts as any).AssetContractLookup;
 
-        const marketContracts = await migrateMarketRegistryContracts(web3, assetRegistryLookupAddr, privateKeyDeployment);
+        const marketContracts = await migrateMarketRegistryContracts(
+            web3,
+            assetRegistryLookupAddr,
+            privateKeyDeployment
+        );
 
-        assetRegistryContract = new AssetContractLookup((web3 as any), assetRegistryLookupAddr);
+        assetRegistryContract = new AssetContractLookup(web3 as any, assetRegistryLookupAddr);
 
-        Object.keys(marketContracts).forEach(async (key) => {
-
+        Object.keys(marketContracts).forEach(async key => {
             let tempBytecode;
             if (key.includes('MarketContractLookup')) {
                 marketRegistryContract = new MarketContractLookup(web3, marketContracts[key]);
@@ -85,21 +93,22 @@ describe('MarketContractLookup', () => {
 
             // const tempBytecode = '0x' + contractInfo.deployedBytecode;
             assert.equal(deployedBytecode, tempBytecode);
-
         });
     });
 
     it('should have the right owner', async () => {
-
         assert.equal(await marketRegistryContract.owner(), accountDeployment);
-
     });
 
     it('should have the right registries', async () => {
-
-        assert.equal(await marketRegistryContract.marketLogicRegistry(), marketLogic.web3Contract._address);
-        assert.equal(await marketRegistryContract.assetContractLookup(), assetRegistryContract.web3Contract._address);
-
+        assert.equal(
+            await marketRegistryContract.marketLogicRegistry(),
+            marketLogic.web3Contract._address
+        );
+        assert.equal(
+            await marketRegistryContract.assetContractLookup(),
+            assetRegistryContract.web3Contract._address
+        );
     });
 
     it('should fail when trying to call init again', async () => {
@@ -110,65 +119,63 @@ describe('MarketContractLookup', () => {
                 '0x1000000000000000000000000000000000000005',
                 '0x1000000000000000000000000000000000000005',
                 '0x1000000000000000000000000000000000000005',
-                { privateKey: privateKeyDeployment });
-        }
-        catch (ex) {
+                { privateKey: privateKeyDeployment }
+            );
+        } catch (ex) {
             failed = true;
             assert.include(ex.message, 'already initialized');
-
         }
         assert.isTrue(failed);
     });
 
     it('should throw an error when calling update as non Owner', async () => {
-
         let failed = false;
         try {
-            await marketRegistryContract.update('0x1000000000000000000000000000000000000005',
-                                                { privateKey: '0x191c4b074672d9eda0ce576cfac79e44e320ffef5e3aadd55e000de57341d36c' });
-        }
-        catch (ex) {
+            await marketRegistryContract.update('0x1000000000000000000000000000000000000005', {
+                privateKey: '0x191c4b074672d9eda0ce576cfac79e44e320ffef5e3aadd55e000de57341d36c'
+            });
+        } catch (ex) {
             failed = true;
             assert.include(ex.message, 'msg.sender is not owner');
-
         }
         assert.isTrue(failed);
     });
 
     it('should be able to update as owner', async () => {
+        await marketRegistryContract.update('0x1000000000000000000000000000000000000005', {
+            privateKey: privateKeyDeployment
+        });
 
-        await marketRegistryContract.update('0x1000000000000000000000000000000000000005',
-                                            { privateKey: privateKeyDeployment });
-
-        assert.equal(await marketRegistryContract.marketLogicRegistry(), '0x1000000000000000000000000000000000000005');
+        assert.equal(
+            await marketRegistryContract.marketLogicRegistry(),
+            '0x1000000000000000000000000000000000000005'
+        );
         assert.equal(await marketDB.owner(), '0x1000000000000000000000000000000000000005');
-
     });
 
     it('should throw when trying to change owner as non-owner', async () => {
-
         let failed = false;
 
         try {
-            await marketRegistryContract.changeOwner('0x1000000000000000000000000000000000000005',
-                                                     { privateKey: '0x191c4b074672d9eda0ce576cfac79e44e320ffef5e3aadd55e000de57341d36c' });
-        }
-        catch (ex) {
+            await marketRegistryContract.changeOwner('0x1000000000000000000000000000000000000005', {
+                privateKey: '0x191c4b074672d9eda0ce576cfac79e44e320ffef5e3aadd55e000de57341d36c'
+            });
+        } catch (ex) {
             failed = true;
             assert.include(ex.message, 'msg.sender is not owner');
-
         }
 
         assert.isTrue(failed);
-
     });
 
     it('should be able to change owner ', async () => {
+        await marketRegistryContract.changeOwner('0x1000000000000000000000000000000000000005', {
+            privateKey: privateKeyDeployment
+        });
 
-        await marketRegistryContract.changeOwner('0x1000000000000000000000000000000000000005',
-                                                 { privateKey: privateKeyDeployment });
-
-        assert.equal(await marketRegistryContract.owner(), '0x1000000000000000000000000000000000000005');
+        assert.equal(
+            await marketRegistryContract.owner(),
+            '0x1000000000000000000000000000000000000005'
+        );
     });
-
 });
